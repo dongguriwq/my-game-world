@@ -184,24 +184,47 @@
   </div>
 
   <script>
-    // 📌 [중요] 모든 사용자에게 기본으로 보여줄 게임 목록입니다.
-    // 새로운 게임을 전 세계 공통으로 추가하고 싶다면 이 배열 안에 추가하시면 됩니다!
+    // 📌 전 세계 모든 사용자가 들어왔을 때 공통으로 뜨게 만든 기본 게임 5가지
     const INITIAL_GAMES = [
       {
         id: 1,
-        title: "2048 웹 게임",
-        category: "🧠 머리쓰는 게임",
-        playUrl: "https://play2048.co/",
-        imageUrl: "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=600&q=80",
-        desc: "숫자를 조합해서 2048 타일을 만드는 중독성 강한 퍼즐 게임입니다."
+        title: "탱크게임",
+        category: "👥 여럿이 함께",
+        playUrl: "https://jolius.my.canva.site/tank-battle",
+        imageUrl: "https://images.unsplash.com/photo-1579373903781-fd5c0c30c4cd?auto=format&fit=crop&w=600&q=80",
+        desc: "2인용 탱크게임입니다. P1(빨강): WASD 이동, T 발사 / P2(초록): 방향키 이동, M 발사"
       },
       {
         id: 2,
-        title: "크롬 공룡 게임",
+        title: "숫자 맞추기",
+        category: "🧠 머리쓰는 게임",
+        playUrl: "https://dongguriwq.github.io/public/game1/",
+        imageUrl: "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=600&q=80",
+        desc: "각 라운드마다 일정 범위 내에서 숫자가 랜덤으로 정해지는 두뇌 퍼즐 게임입니다."
+      },
+      {
+        id: 3,
+        title: "pobg gears",
         category: "⚡ 손맛/순발력",
-        playUrl: "https://chromedino.com/",
+        playUrl: "https://dongguriwq.github.io/public/game2/",
+        imageUrl: "https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=600&q=80",
+        desc: "WASD로 이동하며 닭의 역습을 총으로 저지하는 스릴 넘치는 슈팅 게임입니다."
+      },
+      {
+        id: 4,
+        title: "BACKROOMS - Endless Office",
+        category: "📖 스토리/방탈출",
+        playUrl: "https://dongguriwq.github.io/public/game3/",
+        imageUrl: "https://images.unsplash.com/photo-1509198397868-475647b2a1e5?auto=format&fit=crop&w=600&q=80",
+        desc: "끝없이 이어지는 낡은 미로 속에서 숨겨진 열쇠 3개를 찾아 탈출구를 구하는 공포 탈출 게임입니다."
+      },
+      {
+        id: 5,
+        title: "Neon Arena FPS v3.4",
+        category: "⚡ 손맛/순발력",
+        playUrl: "https://flourishing-nasturtium-9fff6d.netlify.app/",
         imageUrl: "https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=600&q=80",
-        desc: "장애물을 점프해서 피해 멀리 가는 스피드런 게임입니다."
+        desc: "라운드가 지날수록 적과 총기가 강력해지는 네온 스타일 아레나 FPS 게임입니다."
       }
     ];
 
@@ -224,14 +247,11 @@
     });
 
     function loadGames() {
+      // 언제 접속해도 기본 5개 게임이 항상 기본으로 뜨도록 처리
       try {
-        const saved = localStorage.getItem("gamehub_games");
-        if (saved) {
-          games = JSON.parse(saved);
-        } else {
-          // 등록된 개인 게임이 없으면 기본 내장 게임 목록을 사용
-          games = [...INITIAL_GAMES];
-        }
+        const saved = localStorage.getItem("gamehub_user_added");
+        const userAdded = saved ? JSON.parse(saved) : [];
+        games = [...INITIAL_GAMES, ...userAdded];
       } catch (e) {
         games = [...INITIAL_GAMES];
       }
@@ -239,7 +259,9 @@
 
     function saveGames() {
       try {
-        localStorage.setItem("gamehub_games", JSON.stringify(games));
+        // 내 브라우저에서 개별 추가한 게임만 분리 저장
+        const userAdded = games.filter(g => !INITIAL_GAMES.some(init => init.id === g.id));
+        localStorage.setItem("gamehub_user_added", JSON.stringify(userAdded));
       } catch (e) {
         console.warn("localStorage 저장 실패");
       }
