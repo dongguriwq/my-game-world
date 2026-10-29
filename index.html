@@ -184,6 +184,27 @@
   </div>
 
   <script>
+    // 📌 [중요] 모든 사용자에게 기본으로 보여줄 게임 목록입니다.
+    // 새로운 게임을 전 세계 공통으로 추가하고 싶다면 이 배열 안에 추가하시면 됩니다!
+    const INITIAL_GAMES = [
+      {
+        id: 1,
+        title: "2048 웹 게임",
+        category: "🧠 머리쓰는 게임",
+        playUrl: "https://play2048.co/",
+        imageUrl: "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=600&q=80",
+        desc: "숫자를 조합해서 2048 타일을 만드는 중독성 강한 퍼즐 게임입니다."
+      },
+      {
+        id: 2,
+        title: "크롬 공룡 게임",
+        category: "⚡ 손맛/순발력",
+        playUrl: "https://chromedino.com/",
+        imageUrl: "https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=600&q=80",
+        desc: "장애물을 점프해서 피해 멀리 가는 스피드런 게임입니다."
+      }
+    ];
+
     const CATEGORIES = [
       "전체",
       "🧠 머리쓰는 게임",
@@ -207,10 +228,12 @@
         const saved = localStorage.getItem("gamehub_games");
         if (saved) {
           games = JSON.parse(saved);
+        } else {
+          // 등록된 개인 게임이 없으면 기본 내장 게임 목록을 사용
+          games = [...INITIAL_GAMES];
         }
       } catch (e) {
-        console.warn("localStorage 접근 불가, 메모리 모드로 동작합니다.");
-        games = [];
+        games = [...INITIAL_GAMES];
       }
     }
 
@@ -352,7 +375,6 @@
         return;
       }
 
-      // http:// 또는 https:// 자동 보정
       if (!playUrl.startsWith("http://") && !playUrl.startsWith("https://")) {
         playUrl = "https://" + playUrl;
       }
