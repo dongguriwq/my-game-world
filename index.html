@@ -184,7 +184,7 @@
   </div>
 
   <script>
-    // 📌 전 세계 모든 사용자가 들어왔을 때 공통으로 뜨게 만든 기본 게임 5가지
+    // 📌 전 세계 모든 사용자가 접속했을 때 기본으로 뜨는 게임 목록 (총 6가지)
     const INITIAL_GAMES = [
       {
         id: 1,
@@ -225,6 +225,14 @@
         playUrl: "https://flourishing-nasturtium-9fff6d.netlify.app/",
         imageUrl: "https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=600&q=80",
         desc: "라운드가 지날수록 적과 총기가 강력해지는 네온 스타일 아레나 FPS 게임입니다."
+      },
+      {
+        id: 6,
+        title: "오리 날다",
+        category: "☕ 가볍게 한판",
+        playUrl: "https://dazzling-brioche-9b62c2.netlify.app/",
+        imageUrl: "https://images.unsplash.com/photo-1555861496-0666c8981751?auto=format&fit=crop&w=600&q=80",
+        desc: "마우스와 스페이스 바로 점프하여 즐기는 가볍고 재미있는 클리커 장애물 게임입니다."
       }
     ];
 
@@ -247,7 +255,6 @@
     });
 
     function loadGames() {
-      // 언제 접속해도 기본 5개 게임이 항상 기본으로 뜨도록 처리
       try {
         const saved = localStorage.getItem("gamehub_user_added");
         const userAdded = saved ? JSON.parse(saved) : [];
@@ -259,7 +266,6 @@
 
     function saveGames() {
       try {
-        // 내 브라우저에서 개별 추가한 게임만 분리 저장
         const userAdded = games.filter(g => !INITIAL_GAMES.some(init => init.id === g.id));
         localStorage.setItem("gamehub_user_added", JSON.stringify(userAdded));
       } catch (e) {
